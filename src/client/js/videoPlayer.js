@@ -17,13 +17,28 @@ let controlsMovementTimeout = null;
 let volumeValue = 0.5;
 video.volume = volumeValue;
 
-const handlePlayClick = e => {
+const handlePlayAndPause = () => {
   if (video.paused) {
     video.play();
   } else {
     video.pause();
   }
   playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
+};
+
+const handlePlayClick = () => {
+  handlePlayAndPause();
+};
+
+const handleVideoClick = () => {
+  handlePlayAndPause();
+};
+
+const handleKeyup = event => {
+  const { key } = event;
+  if (key === " ") {
+    handlePlayAndPause();
+  }
 };
 
 const handleMuteClick = e => {
@@ -44,7 +59,7 @@ const handleVolumeChange = event => {
   } = event;
   if (video.muted) {
     video.muted = false;
-    muteBtn.innerText = "Mute";
+    muteBtnIcon.classList = "fas fa-volume-up";
   }
   volumeValue = value;
   video.volume = value;
@@ -103,9 +118,11 @@ const handleMouseLeave = () => {
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
+video.addEventListener("click", handleVideoClick);
 video.addEventListener("loadeddata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullscreen);
+window.addEventListener("keyup", handleKeyup);
